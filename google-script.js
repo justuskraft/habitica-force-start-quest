@@ -1,6 +1,7 @@
 function forceStartQuest() {
-    var habId = "069f51dd-a6f0-49ba-bae5-8df76195fb3c";
-    var habToken = "24544036-a40a-4087-b66d-19baacd63adc";
+    var habId = "#HabiticaUserID#";
+    var habToken = "#HabiticaAPIToken#";
+    var timeToWait = 3780; // In Seconds
 
     var paramsTemplate = {
         "method": "get",
@@ -22,9 +23,8 @@ function forceStartQuest() {
         }
         var params = paramsTemplate;
 
-        Utilities.sleep(4200 * 1000);
+        Utilities.sleep(timeToWait * 1000);
         UrlFetchApp.fetch("https://habitica.com/api/v3/groups/party/quests/force-start", params);
-
 
     }
 }
