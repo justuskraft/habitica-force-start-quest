@@ -1,8 +1,7 @@
 function forceStartQuest() {
     var habId = "#HabiticaUserID#";
     var habToken = "#HabiticaAPIToken#";
-    var timeToWait = 3780; // In Seconds
-
+    var scriptProperties = PropertiesService.getScriptProperties();
     var paramsTemplate = {
         "method": "get",
         "headers": {
@@ -12,8 +11,8 @@ function forceStartQuest() {
     }
     var response = UrlFetchApp.fetch("https://habitica.com/api/v3/groups/party", paramsTemplate);
     var party = JSON.parse(response);
-
-    if ((party.data.quest.key != undefined) && (party.data.quest.active != true)) {
+    if (scriptProperties.getProperty('PENDING_QUEST') == 'true') {
+        scriptProperties.setProperty('PENDING_QUEST', 'false');
         paramsTemplate = {
             "method": "post",
             "headers": {
@@ -22,9 +21,10 @@ function forceStartQuest() {
             }
         }
         var params = paramsTemplate;
-
-        Utilities.sleep(timeToWait * 1000);
         UrlFetchApp.fetch("https://habitica.com/api/v3/groups/party/quests/force-start", params);
-
+    } else if ((party.data.quest.key != undefined) && (party.data.quest.active != true)) {
+        scriptProperties.setProperty('PENDING_QUEST', 'true');
+    } else {
+        scriptProperties.setProperty('PENDING_QUEST', 'false');
     }
 }
